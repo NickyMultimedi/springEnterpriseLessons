@@ -33,7 +33,7 @@ public class MariaDBBeerDao implements BeerDao {
     public List<String> getBeerByAlcohol(float alcohol) {
         List<Map<String, Object>> resultList = template.queryForList(QUERY_ALCOHOL, alcohol);
         return resultList.stream()
-                .map(this::mapToBeerString) // map -> this.mapToBeerString(map)
+                .map(this::mapToBeerString)
                 .collect(Collectors.toList());
     }
 
