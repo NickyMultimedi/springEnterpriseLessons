@@ -1,5 +1,6 @@
 package be.multimedi.lessons.springadvanced;
 
+import be.multimedi.lessons.springadvanced.beers.BeerDao;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
@@ -9,7 +10,10 @@ import org.springframework.context.annotation.Bean;
 public class BeerApp {
     public static void main(String[] args) {
         ConfigurableApplicationContext ctx = SpringApplication.run(BeerApp.class, args);
-        System.out.println(ctx.getBean(String.class));
+        BeerDao dao = ctx.getBean("mariaDBImpl",BeerDao.class);
+        System.out.println(dao.getBeerById(10));
+        dao.setStock(10, 200);
+        System.out.println(dao.getBeerById(10));
     }
 
     @Bean
