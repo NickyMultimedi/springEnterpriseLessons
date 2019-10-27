@@ -4,6 +4,7 @@ import be.multimedi.lessons.springadvanced.beers.Beer;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Objects;
 
 @Entity
 @Table(name = "BeerOrderItems")
@@ -53,5 +54,20 @@ public class BeerOrderItem implements Serializable {
                 ", number=" + number +
                 ", beer=" + beer +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        BeerOrderItem that = (BeerOrderItem) o;
+        return getId() == that.getId() &&
+                getNumber() == that.getNumber() &&
+                Objects.equals(getBeer().getName(), that.getBeer().getName());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId(), getNumber(), getBeer().getName());
     }
 }

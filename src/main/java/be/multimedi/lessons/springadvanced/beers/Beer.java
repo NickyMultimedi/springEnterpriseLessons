@@ -5,9 +5,11 @@ import be.multimedi.lessons.springadvanced.categories.Category;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Objects;
 
 @Entity
 @Table(name="Beers")
+@NamedQuery(name = "findByAlcohol", query = "select b from Beer b where b.alcohol = ?1")
 public class Beer implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -108,9 +110,28 @@ public class Beer implements Serializable {
                 ", price=" + price +
                 ", stock=" + stock +
                 ", alcohol=" + alcohol +
-                ", version=" + version +
-                ", brewer=" + brewer +
-                ", category=" + category +
+//                ", version=" + version +
+                ", brewer=" + brewer.getName() +
+                ", category=" + category.getName() +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Beer beer = (Beer) o;
+        return getId() == beer.getId() &&
+                Double.compare(beer.getPrice(), getPrice()) == 0 &&
+                getStock() == beer.getStock() &&
+                Double.compare(beer.getAlcohol(), getAlcohol()) == 0 &&
+                Objects.equals(getName(), beer.getName()) &&
+                Objects.equals(getBrewer().getName(), beer.getBrewer().getName()) &&
+                Objects.equals(getCategory().getName(), beer.getCategory().getName());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId(), getName(), getPrice(), getStock(), getAlcohol(), getBrewer().getName(), getCategory().getName());
     }
 }

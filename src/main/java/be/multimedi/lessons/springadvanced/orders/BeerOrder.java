@@ -4,6 +4,7 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Table(name = "BeerOrders")
@@ -53,5 +54,20 @@ public class BeerOrder implements Serializable {
                 ", name='" + name + '\'' +
                 ", items=" + items +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        BeerOrder beerOrder = (BeerOrder) o;
+        return getId() == beerOrder.getId() &&
+                Objects.equals(getName(), beerOrder.getName()) &&
+                Objects.equals(getItems().toString(), beerOrder.getItems().toString());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId(), getName(), getItems());
     }
 }
