@@ -10,4 +10,7 @@ open module be.multimedi.lessons.springadvanced {
     requires spring.boot.starter.data.jpa;
     requires java.sql;
     requires java.persistence;
+    // Spring Data
+    requires spring.data.jpa;
+    requires spring.data.commons;
 }

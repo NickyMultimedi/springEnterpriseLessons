@@ -1,6 +1,7 @@
 package be.multimedi.lessons.springadvanced.orders;
 
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -8,6 +9,7 @@ import javax.persistence.EntityTransaction;
 import javax.persistence.PersistenceUnit;
 
 @Repository("beerOrderRepo")
+@Transactional
 public class BeerOrderMariaDbRepository implements BeerOrderRepository {
     EntityManagerFactory managerFactory;
 

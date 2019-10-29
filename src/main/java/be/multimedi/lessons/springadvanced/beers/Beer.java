@@ -9,7 +9,7 @@ import java.util.Objects;
 
 @Entity
 @Table(name="Beers")
-@NamedQuery(name = "findByAlcohol", query = "select b from Beer b where b.alcohol = ?1")
+@NamedQuery(name = "findByAlcohol", query = "select b from Beer b where b.stock = :stock and b.alcohol=:alcohol")
 public class Beer implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
