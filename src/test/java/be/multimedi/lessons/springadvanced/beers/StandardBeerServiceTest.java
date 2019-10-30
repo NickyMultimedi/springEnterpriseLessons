@@ -8,9 +8,12 @@ import be.multimedi.lessons.springadvanced.orders.BeerOrderRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.stereotype.Service;
+import org.springframework.test.annotation.Commit;
 import org.springframework.test.annotation.DirtiesContext;
-import org.springframework.test.annotation.Rollback;
+import org.springframework.test.context.transaction.TestTransaction;
+import org.springframework.transaction.UnexpectedRollbackException;
 import org.springframework.transaction.annotation.Transactional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -19,6 +22,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
 @Transactional
 @DirtiesContext
+@WithMockUser(username = "Nick", roles = "ADULT")
 class StandardBeerServiceTest {
     BeerService service;
     BeerOrderRepository orderRepo;
@@ -43,7 +47,6 @@ class StandardBeerServiceTest {
     void orderBeer() {
         int id = service.orderBeer("MyTestOrder", 1, 2);
         assertNotEquals(0, id);
-        assertEquals(BeerOrder.class, orderRepo.getBeerOrderById(id).getClass());
 
         BeerOrder order = orderRepo.getBeerOrderById(id);
         assertEquals("MyTestOrder", order.getName());
@@ -60,9 +63,8 @@ class StandardBeerServiceTest {
         int startStock = beerRepo.getBeerById(1).getStock();
         service.orderBeer("MyTestOrder", 1, 2);
         int endStock = beerRepo.getBeerById(1).getStock();
+        assertTrue(TestTransaction.isFlaggedForRollback());
         assertEquals(startStock - 2, endStock);
-        System.out.println(startStock);
-        System.out.println(endStock);
     }
 
     @Test
@@ -74,24 +76,33 @@ class StandardBeerServiceTest {
     @Test
     void orderBeerRollsBackAfterException() {
         int idAfterInvalidAmount = 0;
-        int idAfterInvalidBeer = 0;
 
         try {
             idAfterInvalidAmount = service.orderBeer("MyTestOrder", 1, 200);
-            idAfterInvalidBeer = service.orderBeer("MyTestOrder", 100, 2);
         } catch (Exception e) { }
 
         assertEquals(0, idAfterInvalidAmount);
+        assertEquals(100, beerRepo.getBeerById(1).getStock());
+    }
+
+    @Test
+    void orderBeerRollsBackAfterInvalidBeerException() {
+        int idAfterInvalidBeer = 0;
+
+        try {
+            idAfterInvalidBeer = service.orderBeer("MyTestOrder", 100, 2);
+        } catch (Exception e) {
+
+        }
         assertEquals(0, idAfterInvalidBeer);
         assertEquals(100, beerRepo.getBeerById(1).getStock());
     }
 
     @Test
-    @Transactional
+//    @Transactional
     void orderBeers() {
         int id = service.orderBeers("MySecondTestOrder", new int[][] {{1,2}, {1,1}});
         assertNotEquals(0, id);
-        assertEquals(BeerOrder.class, orderRepo.getBeerOrderById(id).getClass());
 
         BeerOrder order = orderRepo.getBeerOrderById(id);
         assertEquals("MySecondTestOrder", order.getName());
@@ -121,13 +132,31 @@ class StandardBeerServiceTest {
 
     @Test
     @Transactional
-    void orderBeersRollsBackAfterExceptions() {
+    void orderBeersRollsBackAfterInvalidAmountExceptions() {
         int startStock = beerRepo.getBeerById(1).getStock();
         try {
             service.orderBeers("MySecondTestOrder", new int[][] {{1,2}, {1,2}, {1, 200}});
         } catch (Exception e) {
-//            e.printStackTrace();
+            e.printStackTrace();
         }
+
+        TestTransaction.end();
+        assertEquals(startStock, beerRepo.getBeerById(1).getStock());
+    }
+
+    @Test
+    @Commit
+    void orderBeersRollsBackAfterInvalidBeerException() {
+        int startStock = beerRepo.getBeerById(1).getStock();
+
+        try {
+            service.orderBeers("MySecondTestOrder", new int[][] {{1,2}, {1,2}, {100, 2}});
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        assertThrows(UnexpectedRollbackException.class, TestTransaction::end);
+//        assertTrue(TestTransaction.isFlaggedForRollback());
 
         assertEquals(startStock, beerRepo.getBeerById(1).getStock());
     }

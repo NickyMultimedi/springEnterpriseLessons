@@ -13,4 +13,8 @@ open module be.multimedi.lessons.springadvanced {
     // Spring Data
     requires spring.data.jpa;
     requires spring.data.commons;
+    // Spring Security
+    requires spring.boot.starter.security;
+    requires spring.security.core;
+    requires spring.security.config;
 }

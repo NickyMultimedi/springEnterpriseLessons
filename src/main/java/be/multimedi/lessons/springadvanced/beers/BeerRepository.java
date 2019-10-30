@@ -27,7 +27,6 @@ public interface BeerRepository extends JpaRepository<Beer, Integer> {
         save(b);
     }
 
-//    public List<Beer> getBeerByAlcohol(float alcohol);
     public List<Beer> findByAlcoholOrderByNameAsc(float alcohol);
     public List<Beer> findBeerByAlcoholBetween(float min, float max);
     public List<Beer> findBeerByAlcoholGreaterThan(float min);
