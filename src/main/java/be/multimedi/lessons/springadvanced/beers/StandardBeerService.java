@@ -35,14 +35,12 @@ public class StandardBeerService implements BeerService {
 
     @Override
     @Transactional
-    @Secured({"ROLE_ADULT"})
     public int orderBeer(String name, int beerId, int amount) throws InvalidAmountException, InvalidBeerException {
         return this.orderBeers(name, new int[][] {{beerId,amount}});
     }
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
-    @Secured({"ROLE_ADULT"})
     public int orderBeers(String name, int[][] orderDetails) {
         int[] beerIds = Arrays.stream(orderDetails).mapToInt((arr) -> arr[0]).toArray();
         int[] amounts = Arrays.stream(orderDetails).mapToInt((arr) -> arr[1]).toArray();

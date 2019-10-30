@@ -22,7 +22,6 @@ import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
 @Transactional
 @DirtiesContext
-@WithMockUser(username = "Nick", roles = "ADULT")
 class StandardBeerServiceTest {
     BeerService service;
     BeerOrderRepository orderRepo;
@@ -137,7 +136,7 @@ class StandardBeerServiceTest {
         try {
             service.orderBeers("MySecondTestOrder", new int[][] {{1,2}, {1,2}, {1, 200}});
         } catch (Exception e) {
-            e.printStackTrace();
+//            e.printStackTrace();
         }
 
         TestTransaction.end();
@@ -152,7 +151,7 @@ class StandardBeerServiceTest {
         try {
             service.orderBeers("MySecondTestOrder", new int[][] {{1,2}, {1,2}, {100, 2}});
         } catch (Exception e) {
-            e.printStackTrace();
+//            e.printStackTrace();
         }
 
         assertThrows(UnexpectedRollbackException.class, TestTransaction::end);

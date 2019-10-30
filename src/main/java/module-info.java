@@ -17,4 +17,9 @@ open module be.multimedi.lessons.springadvanced {
     requires spring.boot.starter.security;
     requires spring.security.core;
     requires spring.security.config;
+
+    // Spring Boot Test Bug Fix so everything keeps on working
+    // Why Though???
+    requires net.bytebuddy;
+    requires java.xml.bind;
 }
