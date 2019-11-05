@@ -40,13 +40,14 @@ public class RestBeerOrderService {
                     MediaType.APPLICATION_XML_VALUE
             }
     )
-    public ResponseEntity placeOrder(@RequestBody OrderInfo order, HttpServletRequest request) {
-        int orderId = this.beerService.orderBeers(order.name, order.getAmountsPerBeerMultiArray());
+    public ResponseEntity placeOrder(@RequestBody OrderInfoSimple order, HttpServletRequest request) {
+        int orderId = this.beerService.orderBeer(order.getName(), order.getBeerId(), order.getBeerAmount());
         if (beerRepository.getBeerById(orderId) == null) {
             return ResponseEntity.badRequest().build();
         }
         URI uri = URI.create(request.getRequestURL() + "/" + orderId);
-        return ResponseEntity.created(uri).build();
+//        return ResponseEntity.created(uri).build();
+        return ResponseEntity.ok(null);
     }
 
     @GetMapping(
