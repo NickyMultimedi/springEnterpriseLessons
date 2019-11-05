@@ -7,10 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.net.URI;
@@ -44,12 +41,28 @@ public class RestBeerOrderService {
             }
     )
     public ResponseEntity placeOrder(@RequestBody OrderInfo order, HttpServletRequest request) {
-        int orderId = this.beerService.orderBeer(order.name, order.beerId, order.amount);
+        int orderId = this.beerService.orderBeers(order.name, order.getAmountsPerBeerMultiArray());
         if (beerRepository.getBeerById(orderId) == null) {
             return ResponseEntity.badRequest().build();
         }
         URI uri = URI.create(request.getRequestURL() + "/" + orderId);
         return ResponseEntity.created(uri).build();
+    }
+
+    @GetMapping(
+            value = "{id}",
+            produces = {
+                    MediaType.APPLICATION_JSON_UTF8_VALUE,
+                    MediaType.APPLICATION_XML_VALUE
+            }
+    )
+    public ResponseEntity<BeerOrder> getOrderById(@PathVariable("id") int id) {
+        BeerOrder order = orderRepository.findById(id).orElse(null);
+        if (order == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        } else {
+            return new ResponseEntity<>(order, HttpStatus.OK);
+        }
     }
 
 
