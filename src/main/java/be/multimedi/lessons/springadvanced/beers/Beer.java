@@ -2,14 +2,19 @@ package be.multimedi.lessons.springadvanced.beers;
 
 import be.multimedi.lessons.springadvanced.brewers.Brewer;
 import be.multimedi.lessons.springadvanced.categories.Category;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 import java.io.Serializable;
 import java.util.Objects;
+import java.util.StringJoiner;
 
 @Entity
 @Table(name="Beers")
 @NamedQuery(name = "findByAlcohol", query = "select b from Beer b where b.alcohol=:alcohol")
+@XmlRootElement
 public class Beer implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -102,18 +107,33 @@ public class Beer implements Serializable {
         this.category = category;
     }
 
+//    @Override
+//    public String toString() {
+//        return "Beer{" +
+//                "id=" + id +
+//                ", name='" + name + '\'' +
+//                ", price=" + price +
+//                ", stock=" + stock +
+//                ", alcohol=" + alcohol +
+////                ", version=" + version +
+//                ", brewer=" + brewer.getName() +
+//                ", category=" + category.getName() +
+//                '}';
+//    }
+
+
     @Override
     public String toString() {
-        return "Beer{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", price=" + price +
-                ", stock=" + stock +
-                ", alcohol=" + alcohol +
-//                ", version=" + version +
-                ", brewer=" + brewer.getName() +
-                ", category=" + category.getName() +
-                '}';
+        return new StringJoiner(", ", Beer.class.getSimpleName() + "[", "]")
+                .add("id=" + id)
+                .add("name='" + name + "'")
+                .add("price=" + price)
+                .add("stock=" + stock)
+                .add("alcohol=" + alcohol)
+                .add("version=" + version)
+//                .add("brewer=" + brewer.getName())
+//                .add("category=" + category.getName())
+                .toString();
     }
 
     @Override

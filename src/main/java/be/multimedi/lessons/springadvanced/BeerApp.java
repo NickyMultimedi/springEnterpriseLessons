@@ -21,7 +21,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import javax.sql.DataSource;
 import java.util.List;
 
-@SpringBootApplication
+@SpringBootApplication(exclude = org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration.class)
 public class BeerApp {
     public final static String USR = "homer";
     public final static String PSW = "password";
@@ -31,13 +31,13 @@ public class BeerApp {
     public static void main(String[] args) {
         ConfigurableApplicationContext ctx = SpringApplication.run(BeerApp.class, args);
 
-        BeerRepository repo = ctx.getBean(BeerRepository.class);
-        BeerService service = ctx.getBean(BeerService.class);
-        System.out.println(repo.getBeerById(4));
-
-        service.orderBeers("an Order2", new int [][] {{4,-10}, {4,-5}, {4,-5}});
-
-        System.out.println(repo.getBeerById(4));
+//        BeerRepository repo = ctx.getBean(BeerRepository.class);
+//        BeerService service = ctx.getBean(BeerService.class);
+//        System.out.println(repo.getBeerById(4));
+//
+//        service.orderBeers("an Order2", new int [][] {{4,-10}, {4,-5}, {4,-5}});
+//
+//        System.out.println(repo.getBeerById(4));
 
     }
 

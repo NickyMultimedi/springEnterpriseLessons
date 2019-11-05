@@ -1,6 +1,7 @@
 package be.multimedi.lessons.springadvanced.orders;
 
 import javax.persistence.*;
+import javax.xml.bind.annotation.XmlRootElement;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -8,6 +9,7 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "BeerOrders")
+@XmlRootElement
 public class BeerOrder implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

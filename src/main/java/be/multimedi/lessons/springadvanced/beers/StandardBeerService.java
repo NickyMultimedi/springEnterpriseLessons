@@ -6,6 +6,7 @@ import be.multimedi.lessons.springadvanced.orders.BeerOrder;
 import be.multimedi.lessons.springadvanced.orders.BeerOrderItem;
 import be.multimedi.lessons.springadvanced.orders.BeerOrderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Primary;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -19,6 +20,7 @@ import java.util.stream.Collectors;
 
 @Service("beerService")
 @Transactional
+@Primary
 public class StandardBeerService implements BeerService {
     BeerOrderRepository beerOrderRepository;
     BeerRepository beerRepository;

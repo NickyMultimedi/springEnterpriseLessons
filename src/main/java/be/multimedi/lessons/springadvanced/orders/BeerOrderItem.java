@@ -3,11 +3,13 @@ package be.multimedi.lessons.springadvanced.orders;
 import be.multimedi.lessons.springadvanced.beers.Beer;
 
 import javax.persistence.*;
+import javax.xml.bind.annotation.XmlRootElement;
 import java.io.Serializable;
 import java.util.Objects;
 
 @Entity
 @Table(name = "BeerOrderItems")
+@XmlRootElement
 public class BeerOrderItem implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

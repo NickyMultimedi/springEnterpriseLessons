@@ -1,14 +1,19 @@
 package be.multimedi.lessons.springadvanced.brewers;
 
 import be.multimedi.lessons.springadvanced.beers.Beer;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
 @Entity
 @Table(name = "Brewers")
-public class Brewer {
+@XmlRootElement
+public class Brewer implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="Id")
@@ -82,6 +87,8 @@ public class Brewer {
         return beers;
     }
 
+    @XmlTransient
+    @JsonIgnore
     public void setBeers(Set<Beer> beers) {
         this.beers = beers;
     }
@@ -95,7 +102,7 @@ public class Brewer {
                 ", zipCode='" + zipCode + '\'' +
                 ", city='" + city + '\'' +
                 ", turnover=" + turnover +
-                ", beers=" + beers +
+//                ", beers=" + beers +
                 '}';
     }
 }
