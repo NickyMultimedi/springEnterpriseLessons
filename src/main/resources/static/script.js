@@ -32,15 +32,16 @@ function placeOrder() {
     const orderName = document.getElementById("orderName").value;
     const orderBeerId = document.getElementById("orderedBeer").value;
     const orderBeerAmount = document.getElementById("orderedAmount").value;
+    let orderItem = {name: orderName, beerId: orderBeerId, beerAmount: orderBeerAmount};
 
     const httpRequest = new XMLHttpRequest();
     httpRequest.onload = onPlaceOrderLoad;
     httpRequest.open("POST", "orders", true);
     httpRequest.setRequestHeader("Accept", "*/*");
     httpRequest.setRequestHeader("Content-Type", "application/json");
-    let orderItem = '{"name" : "' + orderName + '", "beerId" : "' + orderBeerId +'", "beerAmount" : "' + orderBeerAmount +'" }';
-    console.log(orderItem);
-    httpRequest.send(orderItem);
+    // let orderItem = '{"name" : "' + orderName + '", "beerId" : "' + orderBeerId +'", "beerAmount" : "' + orderBeerAmount +'" }';
+    console.log(JSON.stringify(orderItem));
+    httpRequest.send(JSON.stringify(orderItem));
 }
 
 function onBeerLoad() {
