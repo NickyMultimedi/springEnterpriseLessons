@@ -130,7 +130,7 @@ public class Beer implements Serializable {
                 .add("price=" + price)
                 .add("stock=" + stock)
                 .add("alcohol=" + alcohol)
-                .add("version=" + version)
+//                .add("version=" + version)
 //                .add("brewer=" + brewer.getName())
 //                .add("category=" + category.getName())
                 .toString();

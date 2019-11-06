@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -40,9 +41,10 @@ public class RestBeerOrderService {
                     MediaType.APPLICATION_XML_VALUE
             }
     )
+    @Secured("ADULT")
     public ResponseEntity placeOrder(@RequestBody OrderInfoSimple order, HttpServletRequest request) {
         int orderId = this.beerService.orderBeer(order.getName(), order.getBeerId(), order.getBeerAmount());
-        if (beerRepository.getBeerById(orderId) == null) {
+        if (orderRepository.getBeerOrderById(orderId) == null) {
             return ResponseEntity.badRequest().build();
         }
         URI uri = URI.create(request.getRequestURL() + "/" + orderId);
@@ -57,6 +59,7 @@ public class RestBeerOrderService {
                     MediaType.APPLICATION_XML_VALUE
             }
     )
+    @Secured("ADULT")
     public ResponseEntity<BeerOrder> getOrderById(@PathVariable("id") int id) {
         BeerOrder order = orderRepository.findById(id).orElse(null);
         if (order == null) {

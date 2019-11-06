@@ -25,6 +25,7 @@ function getOrder() {
     httpRequest.onload = onOrderLoad;
     httpRequest.open("GET", "orders/" + orderId, true);
     httpRequest.setRequestHeader("Accept", "application/json");
+    httpRequest.setRequestHeader("Authorization", "Basic " + btoa("Nick:NickyPw"));
     httpRequest.send(null);
 }
 
@@ -39,6 +40,7 @@ function placeOrder() {
     httpRequest.open("POST", "orders", true);
     httpRequest.setRequestHeader("Accept", "*/*");
     httpRequest.setRequestHeader("Content-Type", "application/json");
+    httpRequest.setRequestHeader("Authorization", "Basic " + btoa("Nick:NickyPw"));
     // let orderItem = '{"name" : "' + orderName + '", "beerId" : "' + orderBeerId +'", "beerAmount" : "' + orderBeerAmount +'" }';
     console.log(JSON.stringify(orderItem));
     httpRequest.send(JSON.stringify(orderItem));
